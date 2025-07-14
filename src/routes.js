@@ -1,8 +1,8 @@
-import { createPuppeteerRouter, Dataset } from 'crawlee';
+import { createPuppeteerRouter, Dataset, sleep } from 'crawlee';
 
 export const router = createPuppeteerRouter();
 
-router.addDefaultHandler(async ({ page, log, ...context }) => {
+router.addDefaultHandler(async ({ page, log }) => {
     log.info('Scraping Marriott hotel directory...');
 
     const hotels = [];
@@ -13,7 +13,7 @@ router.addDefaultHandler(async ({ page, log, ...context }) => {
     try {
         // Wait for the main content to load
         await page.waitForSelector('#worldwide-locations', { timeout: 30000 });
-        await context.waitForTimeout(2000); // Give time for initial JS to execute
+        await sleep(2000); // Give time for initial JS to execute
 
 
         // Function to expand all collapsible sections
@@ -36,7 +36,7 @@ router.addDefaultHandler(async ({ page, log, ...context }) => {
                     try {
                         await button.click();
                         sectionsExpanded++;
-                        await context.waitForTimeout(100); // Small delay between clicks
+                        await sleep(100); // Small delay between clicks
                     } catch (e) {
                         // Continue if element is not clickable
                     }
@@ -53,7 +53,7 @@ router.addDefaultHandler(async ({ page, log, ...context }) => {
             const expanded = await expandAllSections();
             totalExpanded += expanded;
             if (expanded === 0) break; // No more sections to expand
-            await context.waitForTimeout(1000);
+            await sleep(1000);
         }
 
         log.info(`Total sections expanded: ${totalExpanded}`);
