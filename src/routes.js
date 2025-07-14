@@ -13,7 +13,8 @@ router.addDefaultHandler(async ({ page, log }) => {
     try {
         // Wait for the main content to load
         await page.waitForSelector('#worldwide-locations', { timeout: 30000 });
-        await page.waitForTimeout(2000); // Give time for initial JS to execute
+        await context.waitForTimeout(2000); // Give time for initial JS to execute
+
 
         // Function to expand all collapsible sections
         async function expandAllSections() {
@@ -35,7 +36,7 @@ router.addDefaultHandler(async ({ page, log }) => {
                     try {
                         await button.click();
                         sectionsExpanded++;
-                        await page.waitForTimeout(100); // Small delay between clicks
+                        await context.waitForTimeout(100); // Small delay between clicks
                     } catch (e) {
                         // Continue if element is not clickable
                     }
@@ -52,7 +53,7 @@ router.addDefaultHandler(async ({ page, log }) => {
             const expanded = await expandAllSections();
             totalExpanded += expanded;
             if (expanded === 0) break; // No more sections to expand
-            await page.waitForTimeout(1000);
+            await context.waitForTimeout(1000);
         }
 
         log.info(`Total sections expanded: ${totalExpanded}`);
