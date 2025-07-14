@@ -22,7 +22,7 @@ const crawler = new PuppeteerCrawler({
     proxyConfiguration,
     requestHandler: router,
     maxRequestsPerCrawl: 1, // We only need to visit one page
-    requestTimeoutSecs: 120, // Give more time for the page to load all content
+    navigationTimeoutSecs: 120, // Give more time for the page to load all content
     launchContext: {
         launchOptions: {
             headless: true,
