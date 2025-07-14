@@ -12,7 +12,7 @@ await Actor.init();
 
 // Define the URLs to start the crawler with - get them from the input of the Actor or use a default list.
 const input = await Actor.getInput();
-const startUrls = input?.startUrls || [{ url: 'https://apify.com' }];
+const startUrls = input?.startUrls || [{ url: 'https://marriott-hotels.marriott.com/locations/' }];
 
 // Create a proxy configuration that will rotate proxies from Apify Proxy.
 const proxyConfiguration = await Actor.createProxyConfiguration();
@@ -21,11 +21,16 @@ const proxyConfiguration = await Actor.createProxyConfiguration();
 const crawler = new PuppeteerCrawler({
     proxyConfiguration,
     requestHandler: router,
+    maxRequestsPerCrawl: 1, // We only need to visit one page
+    requestTimeoutSecs: 120, // Give more time for the page to load all content
     launchContext: {
         launchOptions: {
+            headless: true,
             args: [
                 '--disable-gpu', // Mitigates the "crashing GPU process" issue in Docker containers
                 '--no-sandbox', // Mitigates the "sandboxed" process issue in Docker containers
+                '--disable-setuid-sandbox',
+                '--disable-dev-shm-usage', // Overcome limited resource problems
             ],
         },
     },
