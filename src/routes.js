@@ -2,7 +2,7 @@ import { createPuppeteerRouter, Dataset } from 'crawlee';
 
 export const router = createPuppeteerRouter();
 
-router.addDefaultHandler(async ({ page, log }) => {
+router.addDefaultHandler(async ({ page, log, ...context }) => {
     log.info('Scraping Marriott hotel directory...');
 
     const hotels = [];
